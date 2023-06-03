@@ -1,32 +1,51 @@
--- Create the books table
-CREATE TABLE books (
-  id INT PRIMARY KEY,
-  title VARCHAR(100) NOT NULL,
-  author VARCHAR(100) NOT NULL,
-  genre VARCHAR(50) NOT NULL,
-  price DECIMAL(8,2) NOT NULL,
-  stock_quantity INT NOT NULL
+-- Create the employees table
+CREATE TABLE employees (
+  employee_id INT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  department VARCHAR(50) NOT NULL,
+  position VARCHAR(50) NOT NULL,
+  salary DECIMAL(8,2) NOT NULL
 );
 
--- Insert sample data
-INSERT INTO books (id, title, author, genre, price, stock_quantity)
-VALUES
-  (1, 'Book 1', 'Author 1', 'Fiction', 9.99, 10),
-  (2, 'Book 2', 'Author 2', 'Fantasy', 14.99, 5),
-  (3, 'Book 3', 'Author 3', 'Mystery', 12.99, 8);
+-- Create stored procedure for adding employees
+CREATE PROCEDURE add_employee (
+  IN emp_id INT,
+  IN emp_name VARCHAR(100),
+  IN emp_dept VARCHAR(50),
+  IN emp_position VARCHAR(50),
+  IN emp_salary DECIMAL(8,2)
+)
+BEGIN
+  INSERT INTO employees (employee_id, name, department, position, salary)
+  VALUES (emp_id, emp_name, emp_dept, emp_position, emp_salary);
+END;
 
--- Retrieve all books
-SELECT * FROM books;
+-- Create stored procedure for updating employee information
+CREATE PROCEDURE update_employee (
+  IN emp_id INT,
+  IN emp_name VARCHAR(100),
+  IN emp_dept VARCHAR(50),
+  IN emp_position VARCHAR(50),
+  IN emp_salary DECIMAL(8,2)
+)
+BEGIN
+  UPDATE employees
+  SET name = emp_name, department = emp_dept, position = emp_position, salary = emp_salary
+  WHERE employee_id = emp_id;
+END;
 
--- Retrieve books of a specific genre
-SELECT * FROM books WHERE genre = 'Fiction';
+-- Create stored procedure for retrieving employee data by department
+CREATE PROCEDURE get_employees_by_department (
+  IN emp_dept VARCHAR(50)
+)
+BEGIN
+  SELECT * FROM employees WHERE department = emp_dept;
+END;
 
--- Insert a new book
-INSERT INTO books (id, title, author, genre, price, stock_quantity)
-VALUES (4, 'Book 4', 'Author 4', 'Science Fiction', 19.99, 3);
-
--- Update the price of a book
-UPDATE books SET price = 17.99 WHERE id = 1;
-
--- Delete books of a specific genre
-DELETE FROM books WHERE genre = 'Mystery';
+-- Create stored procedure for deleting an employee
+CREATE PROCEDURE delete_employee (
+  IN emp_id INT
+)
+BEGIN
+  DELETE FROM employees WHERE employee_id = emp_id;
+END;
